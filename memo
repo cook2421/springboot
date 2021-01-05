@@ -1,0 +1,8 @@
+
+JPA(Java Persistence API)  <-  Hibernate  <-  Spring Data JPA
+
+
+* Hibernate : 인터페이스인 JPA를 사용하기 위한 구현체
+* Spring Data JPA를 쓰는 이유
+    1. 구현체 교체가 용이함 (Hibernate 외에 다른 구현체로...)
+    2.  저장소 교체가 용이함(RDB말고 MongoDB로 연결하고 싶을 때...)
