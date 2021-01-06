@@ -29,6 +29,11 @@ public class Posts {
         this.content = content;
         this.author = author;
     }
+
+    public void update(String title, String content){
+        this.title = title;
+        this.content = content;
+    }
 }
 
 
@@ -58,7 +63,7 @@ public class Posts {
   타입을 TEXT로 변경하고 싶거나(ex: content) 등의 경우에 사용된다.
 
 (5)
-@NoArgsContructor
+@NoArgsConstructor
 * 기본 생성자 자동 추가
 * public Posts(){}와 같은 효과
 

@@ -1,8 +1,71 @@
 
+※ 1
 JPA(Java Persistence API)  <-  Hibernate  <-  Spring Data JPA
-
 
 * Hibernate : 인터페이스인 JPA를 사용하기 위한 구현체
 * Spring Data JPA를 쓰는 이유
     1. 구현체 교체가 용이함 (Hibernate 외에 다른 구현체로...)
     2.  저장소 교체가 용이함(RDB말고 MongoDB로 연결하고 싶을 때...)
+
+
+
+※ 2
+Entity 클래스에서는 절대 Setter 메소드를 만들지 않는다. 이유는 해당 클래스의 인스턴스 값들이
+언제 어디서 변해야 하는지 코드상으로 명확하게 구분할 수가 없어, 차후 기능 변경 시 정말 복잡해지기
+때문이다.
+
+대신, 해당 필드의 값 변경이 필요하면 명확히 그 목적과 의도를 나타낼 수 있는 메소드를 추가해야만 한다.
+
+
+Setter가 없는 상황에서 어떻게 값을 채워 DB에 삽입을 해야할까?
+
+기본적인 구조는 생성자를 통해 최종값을 채운 후 DB에 삽입하는 것이며, 값 변경이 필요한 경우
+해당 이벤트에 맞는 public 메소드를 호출하여 변경하는 것을 전제로 한다.
+
+또 다른 방법으로는 @Builder를 통해 제공되는 빌더 클래스를 사용하는 것이다. 생성자난 빌더나
+생성 시점에 값을 채워주는 역할을 똑같다. 다만, 생성자의 경우 지금 채워야할 필드가 무엇인지
+명확히 지정할 수가 없다.
+
+ex) 생성자 방식
+public Example(String a, String b) {
+    this.a = a;
+    this.b = b;
+}
+
+ex) 빌더 방식
+Example.builder()
+    .a(a)
+    .b(b)
+    .build();
+
+
+
+※ 3
+* Web Layer
+    - 흔히 사용되는 컨트롤러(@Controller)와 JSP/Freemarker 등의 뷰 템플릿 영역
+    - 이외에도 필터(@Filter), 인터셉터, 컨트롤러 어드바이스(@ControllerAdvice) 등
+      외부 요청과 응답에 대한 전반적인 영역을 이야기한다.
+
+* Service Layer
+    - @Service에 사용되는 서비스 영역
+    - 일반적으로 Controller와 Dao의 중간 영역에서 사용된다.
+    - @Transactional이 사용되어야 하는 영역이기도 하다.
+
+* Repository Layer
+    - Database와 같이 데이터 저장소에 접근하는 영역
+    - 기존의 Dao(Data Access Object)영역으로 이해하면 됨.
+
+* Dtos
+    - Dto(Data Transfer Object)는 계층 간에 데이터 교환을 위한 객체를 이야기하며
+      Dtos는 이들의 영역을 얘기한다.
+    - 예를 들어, 뷰 템플릿 엔진에서 사용될 객체나 Repository Layer에서 결과로 넘겨준
+      객체 등을 말한다.
+
+* Domain Model
+    - 도메인이라 불리는 개발 대상을 모든 사람이 동일한 관점에서 이해할 수 있고 공유할 수 있도록
+      단순화시킨 것을 도메인 모델이라고 한다.
+    - @Entity가 사용된 영역 역시 도메인 모델이라고 할 수 있다.
+    - 다만, 무조건 데이터베이스의 테이블과 관계가 있어야만 하는 것은 아니다.
+    - VO처럼 값 객체들도 이 영역에 해당하기 때문이다.
+
+ps. 위의 5가지 계층
