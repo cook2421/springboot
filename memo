@@ -9,6 +9,8 @@ JPA(Java Persistence API)  <-  Hibernate  <-  Spring Data JPA
 
 
 
+
+
 ※ 2
 Entity 클래스에서는 절대 Setter 메소드를 만들지 않는다. 이유는 해당 클래스의 인스턴스 값들이
 언제 어디서 변해야 하는지 코드상으로 명확하게 구분할 수가 없어, 차후 기능 변경 시 정말 복잡해지기
@@ -40,6 +42,8 @@ Example.builder()
 
 
 
+
+
 ※ 3
 * Web Layer
     - 흔히 사용되는 컨트롤러(@Controller)와 JSP/Freemarker 등의 뷰 템플릿 영역
@@ -68,4 +72,20 @@ Example.builder()
     - 다만, 무조건 데이터베이스의 테이블과 관계가 있어야만 하는 것은 아니다.
     - VO처럼 값 객체들도 이 영역에 해당하기 때문이다.
 
-ps. 위의 5가지 계층
+ps. 위의 5가지 계층에서 비즈니스 처리를 담당하는 곳은 Domain이다.
+    기존에 서비스로 처리하던 방식을 '트랜잭션 스크립트'라고 한다.
+    서비스는 트랜잭션과 도메인 간의 순서만 보장해준다.
+
+
+
+
+
+※ 4
+스프링에서 Bean 주입 방식에는 3가지가 있다.
+* @Autowired
+* setter
+* 생성자
+
+이 중에서 '생성자로 주입받는 방식'을 가장 권장한다.
+@RequiredArgsConstructor는 final로 선언된 모든 필드를 인자값으로 하는 생성자를
+롬복의 @RequiredArgsConstructor가 대신 생성해준 것.
