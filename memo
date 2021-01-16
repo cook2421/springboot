@@ -203,3 +203,11 @@ React.js나 Vue.js를 이용한 SPA(Single Page Application)는 브라우저에�
 OAuth 로그인 구현 시 앞선 목록의 것들을 모두 구글, 네이버 등에 맡기면 되기 때문에,
 서비스 개발에 집중할 수 있다.
 
+
+* 스프링부트2와 관련한 다른 인터넷 자료를 참고할 때 다음 2가지를 확인하면 된다.
+- spring-security-oauth2-autoconfiguration 라이브러리를 사용했는가?
+- application.properties 혹은 application.yml에 작성된 정보의 차이
+
+스프링부트1.5 방식에서는 url 주소를 모두 명시해야 하지만, 2.0 방식에서는 client 인정 정보만 입력하면 된다.
+1.5 버전에서 입력했던 값들은 2.0 버전에서 모두 enum으로 대체되었다.
+(CommonOAuth2Provider라는 enum이 새롭게 추가되어 구글, 깃허브, 페이스북, 옥타(Okta)의 기본 설정값이 모두 여기서 제공됨)
