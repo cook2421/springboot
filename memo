@@ -211,3 +211,25 @@ OAuth 로그인 구현 시 앞선 목록의 것들을 모두 구글, 네이버 �
 스프링부트1.5 방식에서는 url 주소를 모두 명시해야 하지만, 2.0 방식에서는 client 인정 정보만 입력하면 된다.
 1.5 버전에서 입력했던 값들은 2.0 버전에서 모두 enum으로 대체되었다.
 (CommonOAuth2Provider라는 enum이 새롭게 추가되어 구글, 깃허브, 페이스북, 옥타(Okta)의 기본 설정값이 모두 여기서 제공됨)
+
+** 승인된 리디렉션 URI : http://localhost:8080/login/oauth2/code/google
+** 클라이언트 ID : 857428719974-jt2fkqkipurr81h1k1b72f4hk0ncd3hv.apps.googleusercontent.com
+** 클라이언트 PW : K2YHoJyOpcW78S_g1udAQ36U
+
+스프링부트2 버전의 시큐리티에서는 기본적으로 '{도메인}/login/oauth2/code/{소셜서비스코드}'로 리다이렉트를 지원한다.
+
+
+
+
+
+※ 11
+* 구글 로그인 연동하기
+1. User 클래스            : 사용자 정보를 담당할 도메인(domain 아래 user 패키지 생성 후 User 클래스 생성)
+2. Role Enum 클래스       : 각 사용자의 권한을 관리할 Enum 클래스
+3. UserRepository 클래스  : User의 CRUD를 책임질 클래스
+4. SecurityConfig 클래스  : OAuth 라이브러리를 이용한 소셜 로그인 설정 코드 작성
+                           (springboot 패키지 아래 config.auth 패키지 생성 후 클래스 생성)
+5. CustomOAuth2UserService 클래스 : 구글 로그인 이후 가져온 사용자의 정보(email, name, picture 등)들을 기반으로
+                                   가입 및 정보수정, 세션 저장 등의 기능을 지원한다.
+6. OAuthAttributes 클래스 : OAuth의 dto 클래스 (config.auth.dto 패키지를 만들어 그 안에 클래스 생성한다)
+7. SessionUser 클래스     : 인증된 사용자 정보만 필요로 한다. (dto 패키지에 생성)
