@@ -75,6 +75,19 @@ getUserNameAttributeName
 * 구글의 경우 기본적으로 코드를 지원하지만, 네이버/카카오 등은 기본 지원하지 않는다. 구글의 기본 코드는 "sub"이다.
 * 이후 네이버 로그인과 구글 로그인을 동시 지원할 때 사용한다.
 
+(3)
+OAuthAttributes
+* OAuth2UserService를 통해 가져온 OAuth2User의 attribute를 담은 클래스이다.
+* 이후 네이버 등 다른 소셜 로그인도 이 클래스를 사용한다.
 
+(4)
+SessionUser
+* 세션에 사용자 정보를 저장하기 위한 Dto 클래스이다.
+* 왜, User 클래스를 쓰지 않고 새로 만들어서 쓰는가?
+
+(5)
+saveOrUpdate
+* 구글 사용자 정보가 업데이트 되었을 때를 대비하여 update 기능도 같이 구현한다.
+* 사용자의 이름이나 프로필 사진이 변경되면 User 엔티티에도 반영된다.
 
 */
