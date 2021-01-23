@@ -1,10 +1,10 @@
 package springboot.config.auth;
 
 import lombok.RequiredArgsConstructor;
-import org.h2.engine.Role;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import springboot.domain.user.Role;
 
 @RequiredArgsConstructor
 @EnableWebSecurity      //..(1)

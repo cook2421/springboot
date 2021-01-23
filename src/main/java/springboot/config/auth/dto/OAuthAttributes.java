@@ -52,7 +52,7 @@ public class OAuthAttributes {
 
         return OAuthAttributes.builder()
                 .name((String) response.get("name"))
-                .eamil((String) response.get("email"))
+                .email((String) response.get("email"))
                 .picture((String) response.get("profile_image"))
                 .attributes(response)
                 .nameAttributeKey(userNameAttributeName)

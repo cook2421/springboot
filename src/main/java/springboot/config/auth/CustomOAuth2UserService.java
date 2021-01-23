@@ -9,6 +9,8 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import springboot.config.auth.dto.OAuthAttributes;
+import springboot.config.auth.dto.SessionUser;
 import springboot.domain.user.User;
 import springboot.domain.user.UserRepository;
 
