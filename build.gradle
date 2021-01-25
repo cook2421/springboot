@@ -42,6 +42,7 @@ dependencies {
     compile('com.h2database:h2')                                            // ..(2)
     compile('org.springframework.boot:spring-boot-starter-mustache')        // ..(3)
     compile('org.springframework.boot:spring-boot-starter-oauth2-client')   // ..(4)
+    compile('org.springframework.session:spring-session-jdbc')
     annotationProcessor("org.projectlombok:lombok")
     compileOnly("org.projectlombok:lombok")
     testCompile('org.springframework.boot:spring-boot-starter-test')
