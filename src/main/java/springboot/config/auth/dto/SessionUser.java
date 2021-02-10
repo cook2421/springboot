@@ -1,11 +1,13 @@
 package springboot.config.auth.dto;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import springboot.domain.user.User;
 
 import java.io.Serializable;
 
 @Getter
+@RequiredArgsConstructor
 public class SessionUser implements Serializable {
     private String name;
     private String email;

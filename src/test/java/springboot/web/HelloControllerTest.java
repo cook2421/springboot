@@ -26,8 +26,8 @@ public class HelloControllerTest {
     @Autowired  // ..(3)
     private MockMvc mvc;    // ..(4)
 
-    @WithMockUser(roles = "USER")
     @Test
+    @WithMockUser(roles = "USER")
     public void hello가_리턴된다() throws Exception {
         String hello = "hello";
 
@@ -37,6 +37,7 @@ public class HelloControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void helloDto가_리턴된다() throws Exception {
         String name = "hello";
         int amount = 1000;
