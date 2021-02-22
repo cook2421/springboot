@@ -1,0 +1,44 @@
+
+※ 1
+총 3단계를 통해 배포 방식 개선
+
+STEP.1  스크립트를 실행하여 수동으로 프로젝트 test&build 하기
+    * 프로젝트 설정 - MariaDB 드라이버 등록(build.gradle)
+    * RDB에 프로젝트에 사용되는 테이블 생성
+    * 외부 Security 파일 등록
+    * 배포 스크립트 작성
+    * EC2 설정 - RDS 접속 정보 설정
+    * EC2에서 소셜 로그인
+
+STEP.2 깃허브에 Push하면 자동 Test&Build&Deploy
+    * Github와 Travis CI 연동
+    * 프로젝트 Travis CI(.travis.yml) 설정
+    * Travis CI와 AWS S3 연동
+        - AWS Key(IAM, Identity and Access Management) 발급
+        - Travis CI에 IAM키 등록
+        - AWS S3 버킷 생성
+        - Travis CI의 빌드내용(Jar)을 S3에 올리기 위해 프로젝트(.travis.yml)에 설정 추가
+    * Travis CI와 AWS S3, CodeDeploy 연동하기
+        - EC2와 CodeDeploy 연동
+        - CodeDeploy 연동을 위해 EC2에서 사용할 IAM 역할 생성
+        - EC2 서버에 CodeDeploy 에이전트 설치
+        - CodeDeploy -> EC2 접근을 위해 CodeDeploy에서 사용할 IAM 역할 생성
+        - CodeDeploy 생성
+        - CodeDeploy 관련 설정을 appspec.yml에 추가
+        - Travis CI 설정 파일(.travis.yml)에 CodeDeploy 내용을 추가
+    * 배포 자동화 구성(스크립트 파일(.sh) 작성)
+        - 배포를 위한 스크립트(Jar, appspec.yml)가 아닌 것을 제외하기 위해 .travis.yml 내용 수정
+        - CodeDeploy 명령을 담당할 appspec.yml 파일 수정
+    * CodeDeploy 로그 확인
+
+STEP.3 Nginx 무중단 배포
+    * EC2 서버에 Nginx 설치 -> 서비스 시작
+    * EC2 보안 그룹 추가 : 80 포트
+    * 구글, 네이버 리디렉션 URI 추가
+    * 프로젝트와 Nginx 연동
+    * 무중단 배포 스크립트 작성
+        - 8001, 8002 어느 포트를 사용할지 판단하는 API 작성(/profile-real: TravisCI 배포 자동화를 위한 profile입니다)
+        - 무중단 배포를 위한 profile 2개(real1, real2) 추가(application-real1,2.properties 파일 생성)
+        - EC2 서버의 Nginx 설정 수정
+        - 배포 장소 변경/배포 스크립트 사용할 수 있도록 appspec.yml 내용 수정
+        - 프로젝트에 배포 스크립트 작성(5개, profile, start, stop, health, switch)

@@ -43,6 +43,7 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-mustache')        // ..(3)
     compile('org.springframework.boot:spring-boot-starter-oauth2-client')   // ..(4)
     compile('org.springframework.session:spring-session-jdbc')
+    compile('org.mariadb.jdbc:mariadb-java-client')
     annotationProcessor("org.projectlombok:lombok")
     compileOnly("org.projectlombok:lombok")
     testCompile('org.springframework.security:spring-security-test')
