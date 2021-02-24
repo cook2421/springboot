@@ -1,0 +1,34 @@
+language: java
+jdk:
+  - openjdk8
+
+branches:   # (1)
+  only:
+    - master
+
+before_install:
+  - chmod +x gradlew
+
+
+# Travis CI 서버의 Home
+cache:              # (2)
+  directories:
+    - '$HOME/.m2/repository'
+    - '$HOME/.gradle'
+
+script: "./gradlew clean build"   #(3)
+
+
+# CI 실행 완료 시 메일로 알람
+notifications:      # (4)
+  email:
+    recipients:
+      - 'cooking0620@kakao.com'
+
+
+
+
+
+# (1) branches
+#     * Travis CI를 어느 브랜치가 푸시될 때 수행할 지 지정한다.
+#     * 현재 옵션은 오직 master 브랜치에 push될 때만 수행한다.
