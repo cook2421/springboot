@@ -42,3 +42,84 @@ STEP.3 Nginx 무중단 배포
         - EC2 서버의 Nginx 설정 수정
         - 배포 장소 변경/배포 스크립트 사용할 수 있도록 appspec.yml 내용 수정
         - 프로젝트에 배포 스크립트 작성(5개, profile, start, stop, health, switch)
+
+
+
+
+
+※ 2
+[Deploy Shell Script]
+
+#!/bin/bash
+
+REPOSITORY=/home/ec2-user/app/step1         # (1)
+PROJECT_NAME=springboot
+
+cd $REPOSITORY/$PROJECT_NAME/       # (2)
+
+echo "> Git Pull"       # (3)
+
+git pull
+
+echo "> 프로젝트 Build 시작"
+
+./gradlew build         # (4)
+
+echo "> step 1 디렉토리로 이동"
+
+cd $REPOSITORY
+
+echo "> Build 파일 복사"
+
+cp $REPOSITORY/$PROJECT_NAME/build/libs/*.jar $REPOSITORY/      # (5)
+
+echo "> 현재 구동중인 애플리케이션 pid 확인"
+
+CURRENT_PID=$(pgrep -f ${PROJECT_NAME}.*.jar)        # (6)
+
+echo "> 현재 구동중인 애플리케이션 pid: $CURRENT_PID"
+
+if [ -z "$CURRENT_PID" ]; then      # (7)
+    echo "> 현재 구동 중인 애플리케이션이 없으므로 종료하지 않습니다."
+else
+    echo "> kill -15 $CURRENT_PID"
+    kill -15 $CURRENT_PID
+    sleep 5
+fi
+
+echo "> 새 애플리케이션 배포"
+
+JAR_NAME=$(ls -tr $REPOSITORY/ | grep *.jar | tail -n 1)        # (8)
+
+echo "> JAR Name: $JAR_NAME"
+
+# 시큐리티 설정 전 nohup java -jar $REPOSITORY/|$JAR_NAME 2>1 & (9)
+
+nohup java -jar \
+        -Dspring.config.location=classpath:/application.properties,/home/ec2-user/app/application-oauth.properties \
+        $REPOSITORY/$JAR_NAME 2>&1 & # 시큐리티 설정 후 (10)
+
+
+
+(1) REPOSITORY=/home/ec2-user/app/step1
+    - 프로젝트 디렉토리 주소는 스크립트 내에서 자주 사용하는 값이기 때문에 이를 변수로 저장한다.
+    - 마찬가지로 PROJECT_NAME=springboot도 동일하게 변수로 저장한다.
+    - 쉘에서는 타입 없이 선언하여 저장한다.
+    - 쉘에서는 $ 변수명으로 변수를 사용할 수 있다.
+
+(2) cd $REPOSITORY/$PROJECT_NAME/
+    - 제일 처음 git clone 받았던 디렉토리로 이동한다.
+    - 바로 위의 쉘 변수 설명을 따라 /home/ec2-user/app/step1/springboot 주소로 이동한다.
+
+(3) git pull
+    - 디렉토리 이동 후, master 브랜치의 최신 내용을 받는다.
+
+(4) ./gradlew build
+    - 프로젝트 내부의 gradlew로 build를 수행한다.
+
+(5) cp ./build/libs/*.jar $REPOSITORY/
+    - build의 결과물인 jar 파일을 복사해 jar 파일을 모아둔 위치로 복사한다.
+
+(6) CURRENT_PID=$(pgrep -f springboot.*.jar)
+    - 기존에 수행 중이던 스프링 부트 애플리케이션을 종료한다.
+    -
