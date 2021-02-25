@@ -27,8 +27,8 @@ before_deploy:      # (5)
 
 deploy:     # (9)
   - provider: codedeploy
-    access_key_id: $AWS_ACCESS_KEY      # Travis repo setting에 설정된 값
-    secret_access_key: $AWS_SECRET_KEY  # Travis repo setting에 설정된 값
+    access_key_id: $AWS_ACCESS_KEY             # Travis repo setting에 설정된 값
+    secret_access_key: $AWS_ACCESS_SECRET_KEY  # Travis repo setting에 설정된 값
 
     bucket: cooksfirstdishzips          # S3 버킷
     key: cooksfirstdishzips             # 빌드 파일을 압축해서 전달
