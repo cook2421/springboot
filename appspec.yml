@@ -5,7 +5,17 @@ files:
     destination: /home/ec2-user/app/step2/zip/    # (3)
     overwrite: yes    # (4)
 
+permissions:           # (5)
+  - object: /
+    pattern: "**"
+    owner: ec2-user
+    group: ec2-user
 
+hooks:                # (6)
+  ApplicationStart:
+    - location: start.sh  # Nginx와 연결되어 있지 않은 Port로 새 버전의 스프링 부트를 시작한다.
+      timeout: 60
+      runas: ec2-user
 
 
 
@@ -24,3 +34,11 @@ files:
 # (4) overwrite
 #     * 기존에 파일들이 있으며 덮어쓸지를 결정한다.
 #     * 현재 yes라고 했으니 파일들을 덮어쓰게 된다.
+
+# (5) permissions
+#     * CodeDeploy에서 EC2 서버로 넘겨준 파일들을 모두 ec2-user 권한을 갖도록 한다.
+
+# (6) hooks
+#     * CodeDeploy 배포 단계에서 실행할 명령어를 지정한다.
+#     * ApplicationStart라는 단계에서 deploy 스크립트를 ec2-user 권한으로 실행하게 한다.
+#     * timeout: 60으로 스크립트 실행 60초 이상 수행되면 실패가 된다(무한정 기다림을 방지하기 위함)
