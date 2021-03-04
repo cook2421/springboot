@@ -13,7 +13,7 @@ permissions:           # (5)
 
 hooks:                # (6)
   ApplicationStart:
-    - location: start.sh  # Nginx와 연결되어 있지 않은 Port로 새 버전의 스프링 부트를 시작한다.
+    - location: deploy.sh  # Nginx와 연결되어 있지 않은 Port로 새 버전의 스프링 부트를 시작한다.
       timeout: 60
       runas: ec2-user
 
@@ -40,5 +40,5 @@ hooks:                # (6)
 
 # (6) hooks
 #     * CodeDeploy 배포 단계에서 실행할 명령어를 지정한다.
-#     * ApplicationStart라는 단계에서 deploy 스크립트를 ec2-user 권한으로 실행하게 한다.
+#     * ApplicationStart라는 단계에서 deploy.sh를 ec2-user 권한으로 실행하게 한다.
 #     * timeout: 60으로 스크립트 실행 60초 이상 수행되면 실패가 된다(무한정 기다림을 방지하기 위함)
