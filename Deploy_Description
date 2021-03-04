@@ -210,3 +210,60 @@ CodeDeploy는 AWS의 배포 삼형제 중 하나이다.
 
 
 
+
+
+※ 7
+무중단 배포(Nginx)
+
+무중단 배포의 방식
+(1) AWS에서 블루 그린(Blue-Green) 무중단 배포
+(2) Docker를 이용한 웹 서비스 무중단 배포
+(3) L4 스위치를 이용한 무중단 배포(L4는 매우 고가의 장비라 대형 인터넷 기업에서 사용함)
+(4) 엔진엑스(Nginx)를 이용한 무중단 배포
+
+엔진엑스(Nginx)는
+(1) 웹 서버, 리버스 프록시, 캐싱, 로드 밸런싱, 미디어 스트리밍 등을 위한 오픈 소스 소프트웨어이다.
+(2) 이전 아파치(Apache)가 대세였던 자리를 완전히 빼앗은 가장 유명한 웹 서버이자 오픈소스이다.
+(3) 무중단 배포를 구현하는 데 가장 저렴하고 쉬운 방법이다.
+    - 사내 비용 지원이 많다면 AWS 블루 그린 배포 방식을 선택하면 된다.
+(4) 엔진엑스 기능 중 리버스 프록시를 통해 무중단 배포 환경을 구축할 수 있다.
+    - 리버스 프록시란 엔진엑스가 외부의 요청을 받아 백엔드 서버로 요청을 전달하는 행위이다.
+    - 리버스 프록시 서버(엔진엑스)는 요청을 전달하고, 실제 요청에 대한 처리는 뒷단의 웹 애플리케이션 서버들이 처리한다.
+
+
+
+
+
+※ 8
+Nginx가 스프링부트 프로젝트를 바라보도록 프록시 설정
+
+sudo vim /etc/nginx/nginx.conf
+================================================
+    server {
+        listen       80 default_server;
+        listen       [::]:80 default_server;
+        server_name  localhost;
+        root         /usr/share/nginx/html;
+
+        # Load configuration files for the default server block.
+        include /etc/nginx/default.d/*.conf;
+
+        location / {
+                proxy_pass http://localhost:8080;                            # (1)
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; # (2)
+                proxy_set_header Host $http_host;
+        }
+
+        # redirect server error pages to the static page /40x.html
+        #
+        error_page 404 /404.html;
+            location = /40x.html {
+        }
+
+(1) proxy_pass
+    - 엔진엑스로 요청이 오면 http://localhost:8080로 전달한다.
+
+(2) proxy_set_header XXX
+    - 실제 요청 데이터를 header의 각 항목에 할당한다.
+    - 예) proxy_set_header X-Real-IP $remote_addr: Request Header의 X-Real-IP에 요청자의 IP를 저장한다.
