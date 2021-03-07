@@ -12,8 +12,16 @@ permissions:           # (5)
     group: ec2-user
 
 hooks:                # (6)
+  AfterInstall:
+    - location: stop.sh    # Nginx와 연결되어 있지 않은 스프링 부트를 종료한다.
+      timeout: 60
+      runas: ec2-user
   ApplicationStart:
     - location: deploy.sh  # Nginx와 연결되어 있지 않은 Port로 새 버전의 스프링 부트를 시작한다.
+      timeout: 60
+      runas: ec2-user
+  ValidateService:
+    - location: health.sh  # 새 스프링 부트가 정상적으로 실행됐는지 확인한다.
       timeout: 60
       runas: ec2-user
 
@@ -42,3 +50,10 @@ hooks:                # (6)
 #     * CodeDeploy 배포 단계에서 실행할 명령어를 지정한다.
 #     * ApplicationStart라는 단계에서 deploy.sh를 ec2-user 권한으로 실행하게 한다.
 #     * timeout: 60으로 스크립트 실행 60초 이상 수행되면 실패가 된다(무한정 기다림을 방지하기 위함)
+
+
+# stop.sh   : 기존 Nginx에 연결되어 있진 않지만, 실행 중이던 스프링부트 종료
+# start.sh  : 배포할 신규 버전 스프링부트 프로젝트를 stop.sh로 종료한 'profile'로 실행
+# health.sh : 'start.sh'로 실행시킨 프로젝트가 정상적으로 실행됐는지 체크
+# switch.sh : Nginx가 바라보는 스프링부트를 최신 버전으로 변경
+# profile.sh: 앞선 4개 스크립트 파일에서 공용으로 사용할 'profile'과 포트 체크 로직
