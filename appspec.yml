@@ -17,7 +17,7 @@ hooks:                # (6)
       timeout: 60
       runas: ec2-user
   ApplicationStart:
-    - location: deploy.sh  # Nginx와 연결되어 있지 않은 Port로 새 버전의 스프링 부트를 시작한다.
+    - location: start.sh  # Nginx와 연결되어 있지 않은 Port로 새 버전의 스프링 부트를 시작한다.
       timeout: 60
       runas: ec2-user
   ValidateService:
